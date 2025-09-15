@@ -1,0 +1,10 @@
+#pasta para commitar certo
+# Ignora a pasta de dependências
+node_modules/
+
+# Ignora o arquivo de variáveis de ambiente (IMPORTANTE para segurança)
+.env
+
+# Arquivos de log e de sistema
+npm-debug.log*
+.DS_Store
