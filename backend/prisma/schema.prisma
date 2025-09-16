@@ -17,3 +17,40 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Time {
+  id        String     @id @default(cuid())
+  nome      String     @unique
+  logoUrl   String?
+  jogadoras Jogadora[]
+  partidasCasa Partida[] @relation("TimeCasa")
+  partidasFora Partida[] @relation("TimeFora")
+}
+
+model Jogadora {
+  id        String   @id @default(cuid())
+  nome      String
+  posicao   String
+  timeId    String
+  time      Time     @relation(fields: [timeId], references: [id])
+}
+
+model Partida {
+  id          String   @id @default(cuid())
+  data        DateTime
+  local       String
+  timeCasaId  String
+  timeForaId  String
+  golsCasa    Int      @default(0)
+  golsFora    Int      @default(0)
+  timeCasa    Time     @relation("TimeCasa", fields: [timeCasaId], references: [id])
+  timeFora    Time     @relation("TimeFora", fields: [timeForaId], references: [id])
+}
+
+model Noticia {
+  id        String   @id @default(cuid())
+  titulo    String
+  conteudo  String
+  imagemUrl String?
+  createdAt DateTime @default(now())
+}
