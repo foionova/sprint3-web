@@ -1,37 +1,44 @@
-// server.js
-require('dotenv').config();
-
+// 1. Importa o framework Express
 const express = require('express');
-const cors = require('cors');
-const authRoutes = require('./src/routes/auth.routes');
-const profileRoutes = require('./src/routes/profile.routes'); // <-- ADICIONADA
-const errorHandler = require('./src/middleware/errorHandler');
 
+// 2. Inicializa a aplicação Express
 const app = express();
-const PORT = process.env.PORT || 4000;
 
-// Middlewares essenciais
-app.use(express.json()); // Permite que o express entenda requisições com corpo em JSON
+// 3. Define a porta em que o servidor vai rodar
+const PORT = 3000;
 
-const origin = process.env.FRONTEND_URL || '*';
-app.use(cors({ origin, credentials: true })); // Configura o CORS
+// =================== LINHA NOVA ===================
+// 4. Prepara o servidor para entender JSON no corpo das requisições
+app.use(express.json());
+// ==================================================
 
-// Rotas da aplicação
+// --- Nossos Endpoints ---
+
+// Endpoint raiz (GET /) - para testar se a API está no ar
 app.get('/', (req, res) => {
-  res.json({ ok: true, message: 'API rodando' });
+  res.json({ message: 'API no ar!' });
 });
 
-app.use('/auth', authRoutes);
-app.use('/profile', profileRoutes); // <-- ADICIONADA
+// =================== ENDPOINT NOVO ===================
+// Endpoint para cadastrar um novo usuário (POST /cadastro)
+app.post('/cadastro', (req, res) => {
+  // 1. Pega os dados (email e senha) que o frontend enviou no corpo da requisição
+  const { email, senha } = req.body;
 
-// Middleware para rotas não encontradas (404)
-app.use((req, res, next) => {
-  res.status(404).json({ error: true, message: 'Endpoint não encontrado' });
+  // 2. Por enquanto, vamos apenas mostrar no terminal para ver se recebemos
+  console.log('Dados recebidos para cadastro:', { email, senha });
+
+  // AQUI ENTRARÁ A SUA LÓGICA DE VERDADE:
+  // - Validar os dados
+  // - Salvar o usuário no banco de dados, etc.
+
+  // 3. Enviamos uma resposta de sucesso de volta para o frontend
+  res.status(201).json({ message: `Usuário com email ${email} cadastrado com sucesso!` });
 });
+// =====================================================
 
-// Middleware centralizado para tratamento de erros
-app.use(errorHandler);
 
+// Inicia o servidor e o faz "escutar" na porta definida
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
