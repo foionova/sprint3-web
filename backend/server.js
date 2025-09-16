@@ -60,6 +60,69 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// --- Endpoints para Times ---
+
+// Criar um novo time (Create)
+app.post('/times', async (req, res) => {
+  try {
+    const { nome, logoUrl } = req.body;
+    const novoTime = await prisma.time.create({
+      data: { nome, logoUrl },
+    });
+    res.status(201).json(novoTime);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao criar time.' });
+  }
+});
+
+// Listar todos os times (Read)
+app.get('/times', async (req, res) => {
+  try {
+    const times = await prisma.time.findMany();
+    res.json(times);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao listar times.' });
+  }
+});
+
+// Obter um time específico pelo ID (Read)
+app.get('/times/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const time = await prisma.time.findUnique({ where: { id } });
+    if (!time) return res.status(404).json({ error: 'Time não encontrado.' });
+    res.json(time);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao obter time.' });
+  }
+});
+
+// Atualizar um time (Update)
+app.put('/times/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, logoUrl } = req.body;
+    const timeAtualizado = await prisma.time.update({
+      where: { id },
+      data: { nome, logoUrl },
+    });
+    res.json(timeAtualizado);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao atualizar time.' });
+  }
+});
+
+// Deletar um time (Delete)
+app.delete('/times/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.time.delete({ where: { id } });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao deletar time.' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
