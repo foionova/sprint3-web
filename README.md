@@ -28,19 +28,19 @@ A aplicação é composta por:
 ## 🖼️ Demonstração
 
 ### Tela de Login
-*(adicione o print aqui)*
+<img width="1871" height="963" alt="Screenshot 2025-09-16 231532" src="https://github.com/user-attachments/assets/a49abe2c-5f6f-42d0-b461-3a7cd3bde0dc" />
 
 ### Tela Inicial
-*(adicione o print aqui)*
+<img width="1863" height="949" alt="Screenshot 2025-09-16 231541" src="https://github.com/user-attachments/assets/95f2ebb7-45c9-4c81-90d7-153299addce7" />
 
 ### Times
-*(adicione o print aqui)*
+<img width="1870" height="956" alt="Screenshot 2025-09-16 231548" src="https://github.com/user-attachments/assets/0acb2d37-2caf-4b70-92d0-98f1b01cffbc" />
 
 ### Partidas
-*(adicione o print aqui)*
+<img width="1865" height="954" alt="Screenshot 2025-09-16 231556" src="https://github.com/user-attachments/assets/b5876237-e2f5-4a71-9ae1-169c02f97678" />
 
 ### Classificação
-*(adicione o print aqui)*
+<img width="1856" height="950" alt="Screenshot 2025-09-16 231601" src="https://github.com/user-attachments/assets/2a970455-6a71-486a-999d-432b6ae5eeb7" />
 
 ---
 
