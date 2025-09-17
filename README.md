@@ -75,7 +75,7 @@ sprint3-web/
 │   └── ...
 └── README.md
 
-
+```
 ---
 
 ## ⚡ Como Rodar o Projeto
