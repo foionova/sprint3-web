@@ -63,16 +63,18 @@ A aplicação é composta por:
 ---
 
 ## 📂 Estrutura do Projeto
+```bash
 sprint3-web/
-├── backend/ # Servidor Node.js (Express + Swagger)
-│ ├── server.js
-│ ├── package.json
-│ └── ...
-├── frontend-novo/ # Aplicação React (Vite + Tailwind)
-│ ├── src/
-│ ├── package.json
-│ └── ...
+├── backend/              # Servidor Node.js (Express + Swagger)
+│   ├── server.js
+│   ├── package.json
+│   └── ...
+├── frontend-novo/        # Aplicação React (Vite + Tailwind)
+│   ├── src/
+│   ├── package.json
+│   └── ...
 └── README.md
+
 
 ---
 
