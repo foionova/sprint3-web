@@ -18,11 +18,10 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./server.js'], // Arquivos que contêm a documentação
+  apis: ['./server.js'],
 };
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 // --- FIM DA CONFIGURAÇÃO ---
-
 
 const app = express();
 const PORT = 3000;
@@ -37,12 +36,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 /**
  * @swagger
- * /:
+ * /
  * get:
  * summary: Rota de teste para verificar se a API está no ar
- * responses:
- * 200:
- * description: Servidor backend rodando
  */
 app.get('/', (req, res) => {
   res.send('Servidor backend rodando 🚀');
@@ -53,20 +49,6 @@ app.get('/', (req, res) => {
  * /cadastro:
  * post:
  * summary: Rota de cadastro (simulada)
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * type: object
- * properties:
- * email:
- * type: string
- * senha:
- * type: string
- * responses:
- * 200:
- * description: Cadastro realizado com sucesso
  */
 app.post('/cadastro', (req, res) => {
   const dados = req.body;
@@ -83,27 +65,14 @@ app.post('/cadastro', (req, res) => {
  * /login:
  * post:
  * summary: Rota de login (simulada)
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * type: object
- * properties:
- * email:
- * type: string
- * senha:
- * type: string
- * responses:
- * 200:
- * description: Login bem-sucedido
- * 401:
- * description: Credenciais inválidas
  */
 app.post('/login', (req, res) => {
   const { email, senha } = req.body;
   if (email === "teste@teste.com" && senha === "1234") {
-    res.status(200).json({ message: "Login bem-sucedido!" });
+    res.status(200).json({
+      message: "Login bem-sucedido!",
+      token: "fake-jwt-token-123"
+    });
   } else {
     res.status(401).json({ message: "Credenciais inválidas" });
   }
@@ -114,27 +83,41 @@ app.post('/login', (req, res) => {
  * /times:
  * get:
  * summary: Retorna uma lista de times de teste
- * responses:
- * 200:
- * description: Uma lista de times
  */
 app.get('/times', (req, res) => {
-    const timesDeTeste = [
-        { id: '1', nome: 'Corinthians', logoUrl: 'url_logo_corinthians' },
-        { id: '2', nome: 'Palmeiras', logoUrl: 'url_logo_palmeiras' },
-        { id: '3', nome: 'São Paulo', logoUrl: 'url_logo_sao_paulo' },
-    ];
-    res.json(timesDeTeste);
+  const timesDeTeste = [
+    { id: '1', nome: 'Corinthians', logoUrl: 'url_logo_corinthians' },
+    { id: '2', nome: 'Palmeiras', logoUrl: 'url_logo_palmeiras' },
+    { id: '3', nome: 'São Paulo', logoUrl: 'url_logo_sao_paulo' },
+  ];
+  res.json(timesDeTeste);
 });
 
-// ... (as outras rotas de Partidas e Classificação também poderiam ser documentadas aqui) ...
+// --- ROTA PARTIDAS ---
+app.get('/partidas', (req, res) => {
+  const partidas = [
+    { id: '1', data: '2025-09-20', local: 'Arena Corinthians', timeCasa: 'Corinthians', golsCasa: 2, timeFora: 'Palmeiras', golsFora: 1 },
+    { id: '2', data: '2025-09-22', local: 'Allianz Parque', timeCasa: 'Palmeiras', golsCasa: 3, timeFora: 'São Paulo', golsFora: 2 }
+  ];
+  res.json(partidas);
+});
+
+// --- ROTA CLASSIFICAÇÃO ---
+app.get('/classificacao', (req, res) => {
+  const tabela = [
+    { posicao: 1, time: 'Palmeiras', pontos: 45, jogos: 20, vitorias: 14 },
+    { posicao: 2, time: 'Corinthians', pontos: 42, jogos: 20, vitorias: 13 },
+    { posicao: 3, time: 'São Paulo', pontos: 38, jogos: 20, vitorias: 12 }
+  ];
+  res.json(tabela);
+});
 
 // Iniciar servidor
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`✅ Servidor rodando na porta ${PORT}`);
-        console.log(`📘 Documentação da API disponível em http://localhost:${PORT}/api-docs`);
-    });
+  app.listen(PORT, () => {
+    console.log(`✅ Servidor rodando na porta ${PORT}`);
+    console.log(`📘 Documentação da API disponível em http://localhost:${PORT}/api-docs`);
+  });
 }
 
 export default app;

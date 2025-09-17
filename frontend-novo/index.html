@@ -1,10 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-purple': '#8A2BE2',
+              'brand-purple-hover': '#7b24cb',
+              'dark-800': '#1f1f1f',
+              'dark-700': '#2c2c2c',
+              'dark-600': '#3a3a3a',
+            }
+          }
+        }
+      }
+    </script>
+
   </head>
   <body>
     <div id="root"></div>

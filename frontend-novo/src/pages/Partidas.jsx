@@ -7,35 +7,29 @@ function Partidas() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPartidas = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/partidas');
-        setPartidas(response.data);
-      } catch (err) {
-        setError('Erro ao buscar dados das partidas.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPartidas();
+    axios.get('http://localhost:3000/partidas')
+      .then(res => setPartidas(res.data))
+      .catch(() => setError('Erro ao buscar partidas'))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Carregando partidas...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
-    <div>
-      <h1>Próximas Partidas</h1>
-      <ul>
-        {partidas.map(partida => (
-          <li key={partida.id}>
-            {new Date(partida.data).toLocaleDateString('pt-BR')} - {partida.local}: <br/>
-            <strong>{partida.timeCasa} {partida.golsCasa}</strong> vs <strong>{partida.golsFora} {partida.timeFora}</strong>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <main className="flex items-center justify-center min-h-screen p-4">
+      <div className="w-full max-w-4xl bg-dark-800 rounded-2xl shadow-lg p-8">
+        <h1 className="text-2xl font-bold text-center mb-6">Próximas Partidas</h1>
+        {loading && <p className="text-center">Carregando...</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        <ul className="space-y-4">
+          {partidas.map(p => (
+            <li key={p.id} className="p-4 bg-dark-700 rounded-lg text-white">
+              <strong>{p.timeCasa} {p.golsCasa}</strong> vs <strong>{p.golsFora} {p.timeFora}</strong>
+              <br />
+              <span className="text-gray-400">{new Date(p.data).toLocaleDateString('pt-BR')} - {p.local}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </main>
   );
 }
 

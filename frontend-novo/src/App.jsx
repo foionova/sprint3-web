@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ProtectedRoute from './components/ProtectedRoute'; // 1. Importa o protetor
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Páginas
 import Home from './pages/Home';
