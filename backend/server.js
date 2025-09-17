@@ -1,128 +1,140 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+
+// --- CONFIGURAÇÃO DO SWAGGER ---
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API do Projeto Passa a Bola',
+      version: '1.0.0',
+      description: 'Documentação da API de teste para o frontend',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+      },
+    ],
+  },
+  apis: ['./server.js'], // Arquivos que contêm a documentação
+};
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+// --- FIM DA CONFIGURAÇÃO ---
+
 
 const app = express();
-const prisma = new PrismaClient();
 const PORT = 3000;
-const JWT_SECRET = 'SEU_SEGREDO_JWT_AQUI'; // Troque por uma chave segura
 
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
-// --- Endpoints ---
+// --- ROTAS DA API ---
 
-// Endpoint de Cadastro (POST /cadastro)
-app.post('/cadastro', async (req, res) => {
-  try {
-    const { email, senha } = req.body;
+// Rota da documentação
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-    const userExists = await prisma.user.findUnique({ where: { email } });
-    if (userExists) {
-      return res.status(400).json({ error: 'Email já cadastrado.' });
-    }
+/**
+ * @swagger
+ * /:
+ * get:
+ * summary: Rota de teste para verificar se a API está no ar
+ * responses:
+ * 200:
+ * description: Servidor backend rodando
+ */
+app.get('/', (req, res) => {
+  res.send('Servidor backend rodando 🚀');
+});
 
-    const hashedPassword = await bcrypt.hash(senha, 10);
+/**
+ * @swagger
+ * /cadastro:
+ * post:
+ * summary: Rota de cadastro (simulada)
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * email:
+ * type: string
+ * senha:
+ * type: string
+ * responses:
+ * 200:
+ * description: Cadastro realizado com sucesso
+ */
+app.post('/cadastro', (req, res) => {
+  const dados = req.body;
+  console.log('Dados recebidos no cadastro:', dados);
+  res.json({
+    sucesso: true,
+    mensagem: 'Cadastro realizado com sucesso!',
+    dados
+  });
+});
 
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        senha: hashedPassword,
-      },
+/**
+ * @swagger
+ * /login:
+ * post:
+ * summary: Rota de login (simulada)
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * email:
+ * type: string
+ * senha:
+ * type: string
+ * responses:
+ * 200:
+ * description: Login bem-sucedido
+ * 401:
+ * description: Credenciais inválidas
+ */
+app.post('/login', (req, res) => {
+  const { email, senha } = req.body;
+  if (email === "teste@teste.com" && senha === "1234") {
+    res.status(200).json({ message: "Login bem-sucedido!" });
+  } else {
+    res.status(401).json({ message: "Credenciais inválidas" });
+  }
+});
+
+/**
+ * @swagger
+ * /times:
+ * get:
+ * summary: Retorna uma lista de times de teste
+ * responses:
+ * 200:
+ * description: Uma lista de times
+ */
+app.get('/times', (req, res) => {
+    const timesDeTeste = [
+        { id: '1', nome: 'Corinthians', logoUrl: 'url_logo_corinthians' },
+        { id: '2', nome: 'Palmeiras', logoUrl: 'url_logo_palmeiras' },
+        { id: '3', nome: 'São Paulo', logoUrl: 'url_logo_sao_paulo' },
+    ];
+    res.json(timesDeTeste);
+});
+
+// ... (as outras rotas de Partidas e Classificação também poderiam ser documentadas aqui) ...
+
+// Iniciar servidor
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`✅ Servidor rodando na porta ${PORT}`);
+        console.log(`📘 Documentação da API disponível em http://localhost:${PORT}/api-docs`);
     });
+}
 
-    res.status(201).json({ id: newUser.id, email: newUser.email });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao cadastrar usuário.' });
-  }
-});
-
-// Endpoint de Login (POST /login)
-app.post('/login', async (req, res) => {
-  try {
-    const { email, senha } = req.body;
-
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas.' });
-    }
-
-    const isPasswordValid = await bcrypt.compare(senha, user.senha);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Credenciais inválidas.' });
-    }
-
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao fazer login.' });
-  }
-});
-
-// --- Endpoints para Times ---
-
-// Criar um novo time (Create)
-app.post('/times', async (req, res) => {
-  try {
-    const { nome, logoUrl } = req.body;
-    const novoTime = await prisma.time.create({
-      data: { nome, logoUrl },
-    });
-    res.status(201).json(novoTime);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao criar time.' });
-  }
-});
-
-// Listar todos os times (Read)
-app.get('/times', async (req, res) => {
-  try {
-    const times = await prisma.time.findMany();
-    res.json(times);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao listar times.' });
-  }
-});
-
-// Obter um time específico pelo ID (Read)
-app.get('/times/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const time = await prisma.time.findUnique({ where: { id } });
-    if (!time) return res.status(404).json({ error: 'Time não encontrado.' });
-    res.json(time);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao obter time.' });
-  }
-});
-
-// Atualizar um time (Update)
-app.put('/times/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { nome, logoUrl } = req.body;
-    const timeAtualizado = await prisma.time.update({
-      where: { id },
-      data: { nome, logoUrl },
-    });
-    res.json(timeAtualizado);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar time.' });
-  }
-});
-
-// Deletar um time (Delete)
-app.delete('/times/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    await prisma.time.delete({ where: { id } });
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao deletar time.' });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+export default app;
