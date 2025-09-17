@@ -92,17 +92,17 @@ npm run dev
 Servidor: http://localhost:5173
 
 
-##🔑 Credenciais de Teste
+## 🔑 Credenciais de Teste
 Email: teste@teste.com
 Senha: 1234
 
 
-##📘 Documentação da API
+## 📘 Documentação da API
 
 Com o backend rodando, acesse:
 http://localhost:3000/api-docs
 
-##👨‍💻 Grupo Cristian Belasco Arancibia – RM: 565710
+## 👨‍💻 Grupo Cristian Belasco Arancibia – RM: 565710
 
 João Lucas Ferreira dos Santos – RM: 562608
 
