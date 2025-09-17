@@ -1,4 +1,4 @@
-# Projeto Web - Sistema Esportivo (Sprint 3)
+# Projeto Web - Passa Bola (Sprint 3)
 
 ## 📌 Sobre o Projeto
 Este projeto foi desenvolvido como parte da disciplina de **Desenvolvimento Web**.  
@@ -63,3 +63,51 @@ A aplicação é composta por:
 ---
 
 ## 📂 Estrutura do Projeto
+sprint3-web/
+├── backend/ # Servidor Node.js (Express + Swagger)
+│ ├── server.js
+│ ├── package.json
+│ └── ...
+├── frontend-novo/ # Aplicação React (Vite + Tailwind)
+│ ├── src/
+│ ├── package.json
+│ └── ...
+└── README.md
+
+---
+
+## ⚡ Como Rodar o Projeto
+
+### Backend
+bash
+cd backend
+npm install
+npm run dev
+ http://localhost:3000
+
+### Frontend
+cd frontend-novo
+npm install
+npm run dev
+Servidor: http://localhost:5173
+
+
+##🔑 Credenciais de Teste
+Email: teste@teste.com
+Senha: 1234
+
+
+##📘 Documentação da API
+
+Com o backend rodando, acesse:
+http://localhost:3000/api-docs
+
+##👨‍💻 Grupo Cristian Belasco Arancibia – RM: 565710
+
+João Lucas Ferreira dos Santos – RM: 562608
+
+Felipe Yamaguchi Mesquita – RM: 556170
+
+Samuel de Oliveira da Silva – RM: 566244
+
+Rafael Félix – RM: 565855
